@@ -14,9 +14,7 @@ func DecodeJson(data []byte, v interface{}) {
 		if err != nil {
 			Error("There was an error parsing the JSON data.")
 		}
-
-		Info(v)
 	} else {
-		Info("The JSON data was nil, so no data was parsed.")
+		Warn("The JSON data was nil, so no data was parsed.")
 	}
 }

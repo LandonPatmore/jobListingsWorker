@@ -2,6 +2,7 @@ package utils
 
 import (
 	"dataPullerWorker/types"
+	"fmt"
 )
 
 // Retrieves data about a specific station.
@@ -10,5 +11,9 @@ func RetrieveStationData() {
 
 	var waterTemperatureStation = types.WaterTemperatureStation{}
 	DecodeJson(jsonData, &waterTemperatureStation)
-	waterTemperatureStation.Format()
+
+	// Just print to console the actual API response
+	fmt.Printf("%+v\n", waterTemperatureStation)
+
+	Info(waterTemperatureStation.LogStruct())
 }

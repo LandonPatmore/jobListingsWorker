@@ -7,38 +7,37 @@ import (
 
 const logglyURL string = "http://logs-01.loggly.com/inputs/"
 
-// TODO: DO NOT UPLOAD THIS
 var logglyAPIKey = os.Getenv("LOGGLY_API_KEY")
 
 // Error log.
 func Error(message interface{}) {
-	sendOutLogMessage("Error", message)
+	EchoLog("Error", message)
 }
 
 // Warn log.
 func Warn(message interface{}) {
-	sendOutLogMessage("Warn", message)
+	EchoLog("Warn", message)
 }
 
 // Debug log.
 func Debug(message interface{}) {
-	sendOutLogMessage("Debug", message)
+	EchoLog("Debug", message)
 }
 
 // Info log.
 func Info(message interface{}) {
-	sendOutLogMessage("Info", message)
+	EchoLog("Info", message)
 }
 
 // Trace log.
 func Trace(message interface{}) {
-	sendOutLogMessage("Trace", message)
+	EchoLog("Trace", message)
 }
 
 // Will print out to the console what the log message is, as well as send it to loggly.
 func EchoLog(tag string, message interface{}) {
 	sendOutLogMessage(tag, message)
-	fmt.Printf("Tag: %s\t Message: %s", tag, message)
+	fmt.Printf("Tag: %s\n %+v\n", tag, message)
 }
 
 // Abstracts the message sending to loggly.

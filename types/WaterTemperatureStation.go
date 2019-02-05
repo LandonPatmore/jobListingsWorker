@@ -1,7 +1,5 @@
 package types
 
-import "fmt"
-
 type WaterTemperatureStation struct {
 	Metadata struct {
 		Id   string
@@ -14,11 +12,11 @@ type WaterTemperatureStation struct {
 		V string
 		F string
 	}
+	AmountOfReadings int
 }
 
-func (w WaterTemperatureStation) Format() {
-	fmt.Printf("Id: %s\n"+
-		"Name: %s\n"+
-		"Lat: %s\n"+
-		"Lon: %s\n\n", w.Metadata.Id, w.Metadata.Name, w.Metadata.Lat, w.Metadata.Lon)
+func (w WaterTemperatureStation) LogStruct() WaterTemperatureStation {
+	w.AmountOfReadings = len(w.Data)
+	w.Data = nil
+	return w
 }
