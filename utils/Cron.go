@@ -6,8 +6,8 @@ import (
 )
 
 // Starts the cron job.
-func Start() {
+func CronStart() {
 	fmt.Println("Data retrieval has been started.")
-	gocron.Every(10).Seconds().Do(RetrieveStationData)
+	gocron.Every(10).Minutes().Do(RetrieveStationData)
 	<-gocron.Start()
 }

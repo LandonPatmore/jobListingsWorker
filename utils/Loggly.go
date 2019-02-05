@@ -11,27 +11,27 @@ var logglyAPIKey = os.Getenv("LOGGLY_API_KEY")
 
 // Error log.
 func Error(message interface{}) {
-	EchoLog("Error", message)
+	sendOutLogMessage("Error", message)
 }
 
 // Warn log.
 func Warn(message interface{}) {
-	EchoLog("Warn", message)
+	sendOutLogMessage("Warn", message)
 }
 
 // Debug log.
 func Debug(message interface{}) {
-	EchoLog("Debug", message)
+	sendOutLogMessage("Debug", message)
 }
 
 // Info log.
 func Info(message interface{}) {
-	EchoLog("Info", message)
+	sendOutLogMessage("Info", message)
 }
 
 // Trace log.
 func Trace(message interface{}) {
-	EchoLog("Trace", message)
+	sendOutLogMessage("Trace", message)
 }
 
 // Will print out to the console what the log message is, as well as send it to loggly.
