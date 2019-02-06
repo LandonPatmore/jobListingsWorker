@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"github.com/landonp1203/goUtils/loggly"
 )
 
 // TODO: Look into using json.NewDecoder because the response is a data stream form a server.
@@ -12,9 +13,9 @@ func DecodeJson(data []byte, v interface{}) {
 		var err = json.Unmarshal(data, v)
 
 		if err != nil {
-			Error("There was an error parsing the JSON data.")
+			loggly.Error("There was an error parsing the JSON data.")
 		}
 	} else {
-		Warn("The JSON data was nil, so no data was parsed.")
+		loggly.Warn("The JSON data was nil, so no data was parsed.")
 	}
 }
