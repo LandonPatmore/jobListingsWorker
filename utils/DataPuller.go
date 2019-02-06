@@ -21,7 +21,9 @@ func RetrieveStationData() {
 			var waterTemperatureStation = types.WaterTemperatureStation{}
 			DecodeJson(jsonData, &waterTemperatureStation)
 
-			loggly.InfoEcho(waterTemperatureStation.LogStruct())
+			if waterTemperatureStation.Metadata.Id != "" {
+				loggly.InfoEcho(waterTemperatureStation.LogStruct())
+			}
 		}
 	}
 
