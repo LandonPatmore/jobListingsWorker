@@ -13,9 +13,9 @@ func DecodeJson(data []byte, v interface{}) {
 		var err = json.Unmarshal(data, v)
 
 		if err != nil {
-			loggly.Error("There was an error parsing the JSON data.")
+			loggly.ErrorEcho("There was an error parsing the JSON data.")
 		}
 	} else {
-		loggly.Warn("The JSON data was nil, so no data was parsed.")
+		loggly.WarnEcho("The JSON data was nil, so no data was parsed.")
 	}
 }
