@@ -2,8 +2,8 @@ package utils
 
 import (
 	"dataPullerWorker/types"
+	"github.com/landonp1203/goUtils/loggly"
 	"github.com/landonp1203/goUtils/networking"
-	"goUtils/loggly"
 	"log"
 )
 
