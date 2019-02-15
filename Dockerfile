@@ -1,4 +1,4 @@
-FROM golang:1.11.5
+FROM golang:latest
 
 LABEL maintainer = "Landon Patmore <landon.patmore@gmail.com>"
 
