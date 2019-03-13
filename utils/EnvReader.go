@@ -3,16 +3,22 @@ package utils
 import (
 	"log"
 	"os"
-	"strings"
 )
 
-func ReadStationsEnv() [] string {
-	stationsList, found := os.LookupEnv("STATIONS_LIST")
+func ReadAWSEnv() (awsRegion string) {
+	_, aFound := os.LookupEnv("AWS_ACCESS_KEY_ID")     // we don't return this because the AWS sdk auto detects this
+	_, sFound := os.LookupEnv("AWS_SECRET_ACCESS_KEY") // we don't return this because the AWS sdk auto detects this
+	rKey, rFound := os.LookupEnv("AWS_REGION")
 
-	if found {
-		return strings.Split(stationsList, ",")
+	if !aFound {
+		log.Fatal(`The "AWS_ACCESS_KEY_ID" env variable was not set.  Please set it.`)
 	}
-	
-	log.Fatal(`The "STATIONS_LIST" env variable was not set.  Please set it.`)
-	return nil
+	if !sFound {
+		log.Fatal(`The "AWS_SECRET_ACCESS_KEY" env variable was not set.  Please set it.`)
+	}
+	if !rFound {
+		log.Fatal(`The "AWS_REGION" env variable was not set.  Please set it.`)
+	}
+
+	return rKey
 }

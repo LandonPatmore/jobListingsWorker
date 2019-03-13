@@ -2,29 +2,44 @@ package utils
 
 import (
 	"dataPullerWorker/types"
-	"github.com/landonp1203/goUtils/loggly"
+	"github.com/grokify/html-strip-tags-go"
 	"github.com/landonp1203/goUtils/networking"
-	"log"
+	"goUtils/loggly"
 )
 
-var stationsList = ReadStationsEnv()
+func GetJobsJob() {
+	jobs := getJobPostings()
 
-// Retrieves data about a specific station.
-func RetrieveStationData() {
-
-	for _, station := range stationsList {
-		var jsonData, err = networking.Get("https://tidesandcurrents.noaa.gov/api/datagetter?date=today&station=" + station + "&product=water_temperature&units=english&time_zone=gmt&application=tidal_station_project&format=json")
-
-		if err != nil {
-			log.Println(err)
-		} else {
-			var waterTemperatureStation = types.WaterTemperatureStation{}
-			DecodeJson(jsonData, &waterTemperatureStation)
-
-			if waterTemperatureStation.Metadata.Id != "" {
-				loggly.InfoEcho(waterTemperatureStation.LogStruct())
-			}
-		}
+	if jobs != nil {
+		sendJobsToDB(jobs)
+	} else {
+		loggly.Warn("The jobs list was empty.")
 	}
+}
 
+// Retrieves job postings.
+func getJobPostings() [] *types.GithubJob {
+
+	var jsonData, err = networking.Get("https://jobs.github.com/positions.json?search=java")
+
+	if err != nil {
+		loggly.Error(err)
+		return nil
+	} else {
+		var jobs [] *types.GithubJob
+		DecodeJson(jsonData, &jobs)
+
+		for _, j := range jobs { // strips html tags from `HowToApply` field
+			stripped := strip.StripTags(j.HowToApply)
+			j.HowToApply = stripped
+		}
+
+		return jobs
+	}
+}
+
+func sendJobsToDB(jobs [] *types.GithubJob) {
+	for _, j := range jobs {
+		PutItem(*j)
+	}
 }
