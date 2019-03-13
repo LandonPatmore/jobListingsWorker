@@ -3,8 +3,8 @@ package utils
 import (
 	"dataPullerWorker/types"
 	"github.com/grokify/html-strip-tags-go"
+	"github.com/landonp1203/goUtils/loggly"
 	"github.com/landonp1203/goUtils/networking"
-	"goUtils/loggly"
 )
 
 func GetJobsJob() {
