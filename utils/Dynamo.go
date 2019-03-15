@@ -11,6 +11,7 @@ import (
 
 var dynamoClient = createDynamoClient()
 
+// Creates a dynamo client
 func createDynamoClient() *dynamodb.DynamoDB {
 	rKey := ReadAWSEnv()
 
@@ -29,7 +30,8 @@ func createDynamoClient() *dynamodb.DynamoDB {
 	return client
 }
 
-func PutItem(job types.GithubJob) {
+// Takes items in, marshals them, and then sends them to the database
+func PutItem(job types.GithubJob) error {
 	av, err := dynamodbattribute.MarshalMap(job)
 	input := &dynamodb.PutItemInput{
 		Item:      av,
@@ -39,8 +41,10 @@ func PutItem(job types.GithubJob) {
 	_, err = dynamoClient.PutItem(input)
 
 	if err != nil {
-		loggly.Error(err)
+		return err
 	} else {
 		loggly.Info(job)
 	}
+
+	return nil
 }

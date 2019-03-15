@@ -38,8 +38,13 @@ func getJobPostings() [] *types.GithubJob {
 	}
 }
 
+// Helper to send the jobs array to the database
 func sendJobsToDB(jobs [] *types.GithubJob) {
 	for _, j := range jobs {
-		PutItem(*j)
+		err := PutItem(*j)
+		if err != nil {
+			loggly.Error(err)
+			break
+		}
 	}
 }
