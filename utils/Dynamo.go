@@ -73,3 +73,18 @@ func GetAllItems() (items [] types.GithubJob, err error) {
 
 	return jobs, nil
 }
+
+func GetRowCount() (count int64, err error) {
+	params := &dynamodb.ScanInput{
+		TableName: aws.String(TableName),
+	}
+
+	result, err := dynamoClient.Scan(params)
+
+	if err != nil {
+		loggly.Error(err)
+		return 0, nil
+	}
+
+	return *result.Count, nil
+}
