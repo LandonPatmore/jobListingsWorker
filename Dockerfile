@@ -4,8 +4,10 @@ LABEL maintainer = "Landon Patmore <landon.patmore@gmail.com>"
 
 WORKDIR $GOPATH/src/dataPullerWorker
 
+# SRC . -> DEST .
 COPY . .
 
+# Download dependencies and create vendor folder to store them
 RUN go get -d -v ./...
 
 # Build a statically-linked Go binary for Linux
@@ -17,6 +19,7 @@ FROM alpine:latest
 # Add support for HTTPS and time zones
 RUN apk update && \
     apk upgrade
+
 
 WORKDIR /root/
 

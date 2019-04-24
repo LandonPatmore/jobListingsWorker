@@ -1,15 +1,17 @@
 package utils
 
 import (
-	"dataPullerWorker/types"
 	"github.com/aws/aws-sdk-go/aws"
 	session2 "github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/landonp1203/goUtils/loggly"
+	"jobListingsWorker/types"
 )
 
 var dynamoClient = createDynamoClient()
+
+const TableName = "Job-Listings"
 
 // Creates a dynamo client
 func createDynamoClient() *dynamodb.DynamoDB {
@@ -35,16 +37,39 @@ func PutItem(job types.GithubJob) error {
 	av, err := dynamodbattribute.MarshalMap(job)
 	input := &dynamodb.PutItemInput{
 		Item:      av,
-		TableName: aws.String("Job-Listings"),
+		TableName: aws.String(TableName),
 	}
 
 	_, err = dynamoClient.PutItem(input)
 
 	if err != nil {
+		loggly.Error(err)
 		return err
-	} else {
-		loggly.Info(job)
 	}
 
+	loggly.Info(job)
 	return nil
+}
+
+func GetAllItems() (items [] types.GithubJob, err error) {
+	params := &dynamodb.ScanInput{
+		TableName: aws.String(TableName),
+	}
+
+	result, err := dynamoClient.Scan(params)
+
+	if err != nil {
+		loggly.Error(err)
+		return nil, nil
+	}
+
+	var jobs [] types.GithubJob
+	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &jobs)
+
+	if err != nil {
+		loggly.Error(err)
+		return nil, err
+	}
+
+	return jobs, nil
 }
