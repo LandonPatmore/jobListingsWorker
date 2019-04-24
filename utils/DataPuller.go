@@ -49,8 +49,15 @@ func getJobPostings() [] *types.GithubJob {
 
 // Helper to send the jobs array to the database
 func sendJobsToDB(jobs [] *types.GithubJob) {
+	client, err := aws.CreateDynamoClient()
+
+	if err != nil {
+		loggly.Error(err)
+		return
+	}
+
 	for _, j := range jobs {
-		err := aws.PutItem(TableName, *j)
+		err := aws.PutItem(client, TableName, *j)
 		if err != nil {
 			loggly.Error(err)
 			break
