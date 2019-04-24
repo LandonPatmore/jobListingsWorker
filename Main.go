@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goUtils/common"
+	"github.com/landonp1203/goUtils/common"
 	"jobListingsWorker/utils"
 )
 
