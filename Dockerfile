@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:latest AS build
 
 LABEL maintainer = "Landon Patmore <landon.patmore@gmail.com>"
 
@@ -8,6 +8,23 @@ COPY . .
 
 RUN go get -d -v ./...
 
-RUN go install -v ./...
+# Build a statically-linked Go binary for Linux
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o main .
 
-CMD ["dataPullerWorker"]
+# New build phase -- create binary-only image
+FROM alpine:latest
+
+# Add support for HTTPS and time zones
+RUN apk update && \
+    apk upgrade
+
+WORKDIR /root/
+
+# Copy files from previous build container
+COPY --from=build /go/src/dataPullerWorker/main ./
+
+# Check results
+RUN pwd && find .
+
+# Start the application
+CMD ["./main"]
