@@ -2,7 +2,7 @@ FROM golang:latest AS build
 
 LABEL maintainer = "Landon Patmore <landon.patmore@gmail.com>"
 
-WORKDIR $GOPATH/src/dataPullerWorker
+WORKDIR $GOPATH/src/jobListingsWorker
 
 # SRC . -> DEST .
 COPY . .
@@ -11,7 +11,7 @@ COPY . .
 RUN go get -d -v ./...
 
 # Build a statically-linked Go binary for Linux
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o worker .
 
 # New build phase -- create binary-only image
 FROM alpine:latest
@@ -24,10 +24,10 @@ RUN apk update && \
 WORKDIR /root/
 
 # Copy files from previous build container
-COPY --from=build /go/src/dataPullerWorker/main ./
+COPY --from=build /go/src/jobListingsWorker/worker ./
 
 # Check results
 RUN pwd && find .
 
 # Start the application
-CMD ["./main"]
+CMD ["./worker"]
